@@ -1,5 +1,6 @@
-# SPDX-FileCopyrightText: 2026 Suguru Hirahara
+# SPDX-FileCopyrightText: 2026 Slavi Pantaleev
 # SPDX-FileCopyrightText: 2026 spatterlight
+# SPDX-FileCopyrightText: 2026 Suguru Hirahara
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -40,7 +41,12 @@ provisioner:
         authentik_container_http_host_bind_port: 9000
         authentik_secret_key: secret
 
-        # Variables required for authentik to connect to the Postgres database
+        # Variables required for authentik to connect to the Postgres database.
+        #
+        # Postgres is the only data-store authentik needs nowadays: as of authentik
+        # 2025.10 the cache and the task queue live in Postgres too, which is why
+        # this role no longer has any Redis variables to wire up here.
+        # See: https://docs.goauthentik.io/releases/2025.10
         authentik_database_hostname: "{{ postgres_connection_hostname }}"
         authentik_database_port: "{{ postgres_connection_port }}"
         authentik_database_username: my_database_username
@@ -58,6 +64,9 @@ provisioner:
         # Variables for Postgres
         postgres_uid: 1000
         postgres_gid: 1000
+        # Spelled out (it repeats the role default) so that the verify play, where
+        # the Postgres role's defaults are not in scope, can address the container.
+        postgres_identifier: postgres
         postgres_connection_password: postgres_password
         postgres_container_network: "{{ authentik_container_network }}"
         postgres_managed_databases: |
