@@ -20,7 +20,7 @@ authentik_custom_templates_path: "{{ authentik_base_path }}/custom-templates"
 authentik_data_path: "{{ authentik_base_path }}/data"
 
 # renovate: datasource=docker depName=ghcr.io/goauthentik/server
-authentik_version: "2026.8.0"
+authentik_version: "2026.8.2"
 
 authentik_uid: ""
 authentik_gid: ""
@@ -167,6 +167,13 @@ authentik_container_extra_arguments: "{{ authentik_container_extra_arguments_aut
 authentik_container_extra_arguments_auto: []
 authentik_container_extra_arguments_custom: []
 
+# A list of extra arguments to pass to the process inside the container
+# Example: ['--SOME_ARGUMENT']
+authentik_server_process_extra_arguments: "{{ authentik_server_process_extra_arguments_auto + authentik_server_process_extra_arguments_custom }}"
+authentik_server_process_extra_arguments_auto:
+  - server
+authentik_server_process_extra_arguments_custom: []
+
 # Specifies how often the container health-check will run.
 #
 # For Traefik based setups, it's important that the interval is short,
@@ -292,6 +299,13 @@ authentik_worker_container_additional_networks: "{{ authentik_container_addition
 
 # A list of extra arguments to pass to the container (`docker create` command)
 authentik_worker_container_extra_arguments: "{{ authentik_container_extra_arguments }}"
+
+# A list of extra arguments to pass to the process inside the container
+# Example: ['--SOME_ARGUMENT']
+authentik_worker_process_extra_arguments: "{{ authentik_worker_process_extra_arguments_auto + authentik_worker_process_extra_arguments_custom }}"
+authentik_worker_process_extra_arguments_auto:
+  - worker
+authentik_worker_process_extra_arguments_custom: []
 
 # List of systemd services that the authentik worker systemd service depends on
 authentik_worker_systemd_required_services_list: "{{ authentik_worker_systemd_required_services_list_default + authentik_worker_systemd_required_services_list_auto + authentik_worker_systemd_required_services_list_custom }}"
